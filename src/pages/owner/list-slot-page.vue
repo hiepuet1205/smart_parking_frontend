@@ -3,7 +3,10 @@
     <VBreadCrumbsField :lists="breadCrumbs" />
     <div class="bg-white rounded-borders">
       <div class="row">
-        <div class="text-h6">{{ location }}</div>
+        <div class="text-h6 q-px-lg q-py-md">Parking Lot: <span class="span-text">{{ location.name }}</span></div>
+      </div>
+      <div class="row">
+        <div class="text-h6 q-px-lg">Address: <span class="span-text">{{ location.location }}</span></div>
       </div>
       <div class="row">
         <div class="col-4">
@@ -87,7 +90,8 @@ const breadCrumbs = ref(['Home', 'List Location', 'List Slot']);
 const locationStore = useLocationStore();
 const slotStore = useSlotStore();
 
-const location = ref<string>('');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const location = ref<any>({});
 
 onMounted(async () => {
   const data = await getSlotsByLocationId(Number(route.params.id));
@@ -101,7 +105,7 @@ onMounted(async () => {
   }));
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  location.value = locationStore.getLocations.find((location: any) => location.id === Number(route.params.id))?.location || '';
+  location.value = locationStore.getLocations.find((location: any) => location.id === Number(route.params.id)) || '';
 })
 
 const keyword = ref<string | null>(null);

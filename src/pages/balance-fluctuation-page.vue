@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <VBreadCrumbsField :lists="breadCrumbs" />
-    <div class="bg-white rounded-borders">
+    <div class="bg-white rounded-borders q-pt-lg">
       <VTableField
         :rows="withdrawRequest"
         :columns="columns"
@@ -25,7 +25,7 @@ defineOptions({
   name: 'ListWithdrawRequestPage',
 });
 
-const breadCrumbs = ref(['Home', 'List Rent Request']);
+const breadCrumbs = ref(['Home', 'Balance fluctuation list']);
 
 const withdrawRequest = ref([]);
 

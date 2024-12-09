@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <VBreadCrumbsField :lists="breadCrumbs" />
-    <div class="bg-white rounded-borders">
+    <div class="bg-white rounded-borders q-pt-lg">
       
     
       <VTableField

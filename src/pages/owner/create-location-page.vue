@@ -3,7 +3,7 @@
     <VBreadCrumbsField :lists="breadCrumbs" />
     <div class="bg-white rounded-borders">
       <div class="form clearfix">
-        <VInputSingleImage 
+        <VInputSingleImageCir
           v-model="image"
           label="Image"
           id="input-image"
@@ -16,9 +16,9 @@
           placeholder="name"
           :required="true"
         />
-        <div class="select-field">
+        <div class="select-field input-field">
           <label for="address">Address<span class="text-red">*</span></label>
-          <input id="address" v-model.lazy="location" :placeholder="'address'" list="list-address"/>
+          <input id="address" v-model.lazy="location" :placeholder="'address'" list="list-address" class=""/>
           <datalist id="list-address">
             <option v-for="option in locationStore.getPredictLocations" :key="option.place_id" :value="option.description"></option>
           </datalist>
@@ -33,7 +33,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
-import VInputSingleImage from 'components/common/v-input-single-image.vue';
+// import VInputSingleImage from 'components/common/v-input-single-image.vue';
+import VInputSingleImageCir from 'components/common/v-input-single-image-cir.vue';
 import VInputField from 'components/common/v-input-field.vue';
 import VBreadCrumbsField from 'components/common/v-breadcrumbs.vue';
 import { useLocationStore } from 'src/store/location.store';
@@ -43,7 +44,7 @@ import { useRouter } from 'vue-router';
 const locationStore = useLocationStore();
 const location = ref<string>('');
 
-const breadCrumbs = ref(['Home', 'List Staff', 'Create New Staff']);
+const breadCrumbs = ref(['Home', 'List Location', 'Create New Location']);
 
 const name = ref<string | null>(null);
 const image = ref<File | null>(null);

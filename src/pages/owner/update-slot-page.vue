@@ -3,7 +3,7 @@
     <VBreadCrumbsField :lists="breadCrumbs" />
     <div class="bg-white rounded-borders">
       <div class="form clearfix">
-        <VInputSingleImage 
+        <VInputSingleImageCir
           v-model="image"
           label="Image"
           id="input-image"
@@ -12,23 +12,23 @@
         />
         <VInputField
           v-model="extractLocation"
-          label="extractLocation"
+          label="Extract Location"
           id="input-extractLocation"
-          placeholder="extractLocation"
+          placeholder="Extract Location"
           :required="true"
         />
         <VInputField
           v-model="priceHour"
-          label="priceHour"
+          label="Hourly Rate"
           id="input-priceHour"
-          placeholder="priceHour"
+          placeholder="Hourly Rate"
           :required="true"
         />
         <VInputField
           v-model="emailCoUser"
-          label="email Co-User"
+          label="Email Co-User"
           id="input-emailCoUser"
-          placeholder="email co-user"
+          placeholder="Email co-user"
           :required="true"
         />
         <q-btn no-caps class="btn1 float-right my-10px" @click="handleSubmit">
@@ -41,7 +41,6 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
-import VInputSingleImage from 'components/common/v-input-single-image.vue';
 import VInputField from 'components/common/v-input-field.vue';
 import VBreadCrumbsField from 'components/common/v-breadcrumbs.vue';
 import { useRouter } from 'vue-router';
@@ -49,10 +48,11 @@ import { getDetailSlot, updateSlot } from 'src/api/slot.api';
 import { useRoute } from 'vue-router';
 import { Slot, User } from 'src/components/models';
 import { getUser } from 'src/api/user.api';
+import VInputSingleImageCir from 'src/components/common/v-input-single-image-cir.vue';
 
 const priceHour = ref<string>('');
 
-const breadCrumbs = ref(['Home', 'List Location', 'List Slot', 'Update New Slot']);
+const breadCrumbs = ref(['Home', 'List Location', 'List Slot', 'Update Slot']);
 
 const extractLocation = ref<string | null>(null);
 const image = ref<File | null>(null);
