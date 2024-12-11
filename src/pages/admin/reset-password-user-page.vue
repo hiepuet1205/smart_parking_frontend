@@ -60,7 +60,7 @@ const handleSubmit = async () => {
     await resetPasswordUser(
       newPassword.value, Number(route.params.userId));
 
-    router.push({ name: 'ListUserPage' });
+    router.push({ name: 'AdminListUserPage' });
   } catch (error) {
     console.log(error);
   }
