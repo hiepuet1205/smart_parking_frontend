@@ -26,7 +26,7 @@
         :rows="staffStore.getStaffs"
         :columns="columns"
         :pagination="pagination"
-        :pageCreate="'CreateUserPage'"
+        :pageCreate="'AdminCreateUserPage'"
         :meta="staffStore.getMeta"
         :handle-edit="handleEdit"
       />
