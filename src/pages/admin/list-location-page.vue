@@ -21,20 +21,13 @@
           </q-btn>
         </div>
       </div>
-
-      <div class="row flex justify-end q-mr-lg">
-        <q-btn no-caps class="btn2" :to="{ name: 'CreateLocationPage' }" tag="router-link">
-          <q-icon name="fa-solid fa-circle-plus" class="q-pr-sm"/>
-          Create
-        </q-btn>
-      </div>
     
       <div class="row q-col-gutter-lg px-32px py-16px">
         <div class="col-3" v-for="location in locationStore.getLocations" :key="location.id" >
           <q-card v-ripple class="my-box cursor-pointer q-hoverable">
             <span class="q-focus-helper"></span>
 
-            <router-link :to="{ name: 'ListSlotPage', params: { id: location.id } }">
+            <router-link :to="{ name: 'AdminListSlotPage', params: { id: location.id } }">
               <div class="card-image">
                 <img :src="location.image" />
               </div>
@@ -69,7 +62,7 @@
 import { onMounted, ref } from 'vue';
 import VBreadCrumbsField from 'components/common/v-breadcrumbs.vue';
 import VInputField from 'components/common/v-input-field.vue';
-import { getAllLocationOfUser } from 'src/api/location.api';
+import { getAllLocation } from 'src/api/location.api';
 import { useLocationStore } from 'src/store/location.store';
 
 defineOptions({
@@ -81,7 +74,7 @@ const breadCrumbs = ref(['Home', 'List Location']);
 const locationStore = useLocationStore();
 
 onMounted(async () => {
-  const data = await getAllLocationOfUser();
+  const data = await getAllLocation();
 
   locationStore.setLocations(data);
 })
@@ -90,7 +83,7 @@ const keyword = ref<string | null>(null);
 
 const handleSearch = async () => {
   if (keyword.value) {
-    const data = await getAllLocationOfUser(keyword.value);
+    const data = await getAllLocation();
   
     locationStore.setLocations(data);
   }

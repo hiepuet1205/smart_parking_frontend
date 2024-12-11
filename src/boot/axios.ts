@@ -6,7 +6,7 @@ import { ErrorResponse } from 'src/components/models';
 const api = axios.create({ baseURL: process.env.BACKEND_BASE_URL });
 
 api.interceptors.response.use(function (response: AxiosResponse) {
-  if (response.status === 201) {
+  if (response.status === 201 && !response.config.url?.includes('/add-device-token')) {
     Swal.fire({
       title: 'Success!',
       text: response.data.message,

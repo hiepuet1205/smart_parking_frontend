@@ -1,12 +1,16 @@
 const routes = [
-  // {
-  //   path: '/admin',
-  //   component: () => import('layouts/v-main-layout.vue'),
-  //   children: [
-  //     { path: 'list-manager', name: 'ListManagerPage', component: () => import('pages/admin/list-manager-page.vue') },
-  //     { path: 'create-manager', name: 'CreateManagerPage', component: () => import('pages/admin/create-manager-page.vue') }
-  //   ]
-  // },
+  {
+    path: '/admin',
+    component: () => import('layouts/v-main-layout.vue'),
+    children: [
+      { path: 'list-user', name: 'AdminListUserPage', component: () => import('pages/admin/list-user-page.vue') },
+      { path: 'create-user', name: 'AdminCreateUserPage', component: () => import('pages/admin/create-user-page.vue') },
+      { path: 'reset-password-user/:userId', name: 'AdminResetPasswordUser', component: () => import('pages/admin/reset-password-user-page.vue') },
+      { path: 'location', name: 'AdminListLocationPage', component: () => import('pages/admin/list-location-page.vue') },
+      { path: 'location/:id/slot', name: 'AdminListSlotPage', component: () => import('pages/admin/list-slot-page.vue') },
+      { path: 'list-request', name: 'AdminListRequestPage', component: () => import('pages/admin/list-request-page.vue') },
+    ]
+  },
   {
     path: '/owner_parking_lot',
     component: () => import('layouts/v-main-layout.vue'),

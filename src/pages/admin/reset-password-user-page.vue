@@ -4,14 +4,6 @@
     <div class="bg-white rounded-borders">
       <div class="form clearfix">
         <VInputField
-          v-model="oldPassword"
-          label="Old Password"
-          id="input-oldPassword"
-          placeholder="Old Password"
-          :required="true"
-          type="password"
-        />
-        <VInputField
           v-model="newPassword"
           label="New Password"
           id="input-newPassword"
@@ -39,21 +31,19 @@
 import { ref } from 'vue';
 import VInputField from 'components/common/v-input-field.vue';
 import VBreadCrumbsField from 'components/common/v-breadcrumbs.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
-import { changePassword } from 'src/api/user.api';
-import { useAuthStore } from 'src/store/auth.store';
+import { resetPasswordUser } from 'src/api/user.api';
 
-const breadCrumbs = ref(['Home', 'Change Password']);
+const breadCrumbs = ref(['Home', 'Reset Password User']);
 
-const oldPassword = ref<string>('');
 const newPassword = ref<string>('');
 const newPasswordConfirm = ref<string>('');
 const router = useRouter();
-const useAuth = useAuthStore();
+const route = useRoute();
 
 const handleSubmit = async () => {
-  if (!oldPassword.value || !newPassword.value || !newPasswordConfirm.value) {
+  if (!newPassword.value || !newPasswordConfirm.value) {
     return;
   }
 
@@ -67,13 +57,10 @@ const handleSubmit = async () => {
   }
 
   try {
-    await changePassword({
-      oldPassword: oldPassword.value,
-      newPassword: newPassword.value
-    });
+    await resetPasswordUser(
+      newPassword.value, Number(route.params.userId));
 
-    await useAuth.logout();
-    router.push({ name: 'LoginPage' });
+    router.push({ name: 'ListUserPage' });
   } catch (error) {
     console.log(error);
   }

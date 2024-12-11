@@ -31,6 +31,12 @@
           :type="'password'"
           :required="true"
         />
+        <VSelectField
+          v-model="role"
+          :options="roleOptions"
+          label="Role"
+          id="Role"
+        />
         <q-btn no-caps class="btn1 float-right my-10px" @click="handleSubmit">
           Submit
         </q-btn>
@@ -44,27 +50,35 @@ import { ref } from 'vue';
 import VInputSingleImage from 'components/common/v-input-single-image.vue';
 import VInputField from 'components/common/v-input-field.vue';
 import VBreadCrumbsField from 'components/common/v-breadcrumbs.vue';
-import { createStaff } from 'src/api/staff.api';
 import { useRouter } from 'vue-router';
+import { register } from 'src/api/auth.api';
+import VSelectField from 'components/common/v-select-field.vue';
 
 const router = useRouter();
 
-const breadCrumbs = ref(['Home', 'List Staff', 'Create New Staff']);
+const breadCrumbs = ref(['Home', 'List User', 'Create New User']);
 
 const name = ref<string | null>(null);
 const email = ref<string | null>(null);
 const password = ref<string | null>(null);
 const image = ref<File | null>(null);
+const role = ref<string | null>(null);
+
+const roleOptions = ref([
+  { label: 'Owner parking lot', value: 'OWNER_PARKING_LOT' },
+  { label: 'Owner parking slot', value: 'OWNER_PARKING_SLOT' },
+  { label: 'User', value: 'USER' },
+]);
 
 const handleSubmit = async () => {
   if (!name.value || !email.value || !password.value || !image.value) {
     return;
   }
 
-  const data = await createStaff(name.value, email.value, password.value, image.value);
+  const data = await register(name.value, email.value, password.value, image.value);
 
   console.log(data);
 
-  router.push({ name: 'ListStaffPage' });
+  router.push({ name: 'AdminListUserPage' });
 };
 </script>

@@ -1,6 +1,8 @@
 <template>
   <div class="row px-32px">
-    <p class="text-main2 font-bold font-size-16px">Show {{ recordStart }}-{{ recordEnd }} / {{ total }}</p>
+    <p class="text-main2 font-bold font-size-16px">
+      Show {{ recordStart }}-{{ recordEnd }} / {{ totalRows }}
+    </p>
     <q-space />
     <q-btn v-if="showCreate" no-caps class="btn2" :to="{ name: props?.pageCreate }" tag="router-link">
       <q-icon name="fa-solid fa-circle-plus" class="q-pr-sm"/>
@@ -12,9 +14,8 @@
     <div class="col-12">
       <q-table
         flat bordered
-        :rows="rows"
+        :rows="paginatedRows"
         :columns="columns"
-        :pagination="pagination"
         hide-bottom
         color="primary"
       >
@@ -33,7 +34,7 @@
       </q-table>
       <div class="q-pa-lg flex flex-center">
         <q-pagination
-          v-model="page"
+          v-model="currentPage"
           :max="totalPages"
           input
           color="main"
@@ -44,7 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import { Column, Meta, Pagination } from 'components/models';
+import { Column } from 'components/models';
+import { computed, ref } from 'vue';
 
 defineOptions({
   name: 'VTableField'
@@ -53,24 +55,29 @@ defineOptions({
 const props = withDefaults(defineProps<{
   rows: object[];
   columns: Column[];
-  pagination?: Pagination;
   pageCreate?: string; 
-  meta?: Meta;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleEdit: (row: any) => void;
-  showCreate?: boolean
+  showCreate?: boolean;
 }>(), {
   showCreate: true
 });
 
-const total = props.meta ? props.meta.total : 0;
-const totalPages = props.meta ? Math.ceil(props.meta.total / props.meta.perPage) : 1;
-const page = props.meta ? props.meta.page : 1;
-const recordStart = props.meta ? (page - 1) * props.meta.perPage + 1 : 1;
-const recordEnd = props.meta ? page * props.meta.perPage : 1;
+const currentPage = ref(1);
+const rowsPerPage = 10; // Số dòng trên mỗi trang, có thể thay đổi nếu cần
+
+const totalRows = computed(() => props.rows.length);
+const totalPages = computed(() => Math.ceil(totalRows.value / rowsPerPage));
+
+const recordStart = computed(() => (currentPage.value - 1) * rowsPerPage + 1);
+const recordEnd = computed(() => Math.min(currentPage.value * rowsPerPage, totalRows.value));
+
+const paginatedRows = computed(() => {
+  const start = (currentPage.value - 1) * rowsPerPage;
+  return props.rows.slice(start, start + rowsPerPage);
+});
 
 const getStatusClass = (status: string) => {
   return status.toLocaleLowerCase() === 'active' ? 'status-active' : 'status-inactive';
 };
-
 </script>

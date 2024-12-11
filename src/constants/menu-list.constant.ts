@@ -2,9 +2,21 @@ export const menuList = {
   admin: [
     {
       icon: 'fa-solid fa-user',
-      label: 'Manager',
+      label: 'User',
       separator: true,
-      name: 'ListManagerPage'
+      name: 'AdminListUserPage'
+    },
+    {
+      icon: 'local_parking',
+      label: 'Location',
+      separator: true,
+      name: 'AdminListLocationPage'
+    },
+    {
+      icon: 'request_quote',
+      label: 'Rent Request',
+      separator: true,
+      name: 'AdminListRequestPage'
     },
   ],
   owner_parking_lot: [

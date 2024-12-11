@@ -12,11 +12,14 @@ export const login = async (email: string, password: string) => {
   authStore.setIsAuthenticated();
 }
 
-export const register = async (name: string, email: string, password: string, image: File) => {
+export const register = async (name: string, email: string, password: string, image: File, role?: string) => {
   const form = new FormData();
   form.append('name', name);
   form.append('email', email);
   form.append('password', password);
   form.append('file', image);
+  if (role) {
+    form.append('role', role);
+  }
   await api.post('/users/sign-up', form)
 }

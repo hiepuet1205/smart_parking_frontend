@@ -23,18 +23,11 @@
       <q-toolbar class="bg-white text-main2 h-80px px-30px py-10px pl-0">
         <q-icon name="menu" size="24px"></q-icon>
         <p class="font-size-20px line-height-20px mb-0 ml-10px font-bold ">{{ commonStore.getTitle }}</p>
-        <q-btn no-caps class="btn2">
+        <q-btn v-if="authStore.getInfo?.role !== 'ADMIN'" no-caps class="btn2">
           <q-icon name="fa-solid fa-wallet" class="q-pr-sm"/>
           Amount: {{ Intl.NumberFormat('vi-VN').format(authStore.getInfo?.total || 0) }} VNĐ
         </q-btn>
         <q-space />
-
-  
-        <q-btn flat round>
-          <q-icon name="fa-regular fa-bell">
-          </q-icon>
-          <q-badge color="red" floating rounded>4</q-badge>
-        </q-btn>
 
         <q-btn-dropdown flat no-caps class="ml-10px relative-position">
           <template v-slot:label>
@@ -43,8 +36,13 @@
             </q-avatar>
           </template>
 
-          <q-list separator>
+          <q-list separator v-if="authStore.getInfo?.role !== 'ADMIN'">
             <q-item v-for="(item, index) in listItems" :key="index" clickable @click="item.click">
+              <q-item-section>{{ item.text }}</q-item-section>
+            </q-item>
+          </q-list>
+          <q-list separator v-else>
+            <q-item v-for="(item, index) in listItemAdmin" :key="index" clickable @click="item.click">
               <q-item-section>{{ item.text }}</q-item-section>
             </q-item>
           </q-list>
@@ -61,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { getInfo } from 'src/api/user.api';
+import { addDeviceToken, getInfo } from 'src/api/user.api';
 import { useAuthStore } from 'src/store/auth.store';
 import { useCommonStore } from 'src/store/common.store';
 import { onMounted } from 'vue';
@@ -100,11 +98,35 @@ const listItems = [
   }
 ]
 
+const listItemAdmin = [
+  {
+    text: 'Logout',
+    click: handleLogout
+  }
+]
+
 defineOptions({
   name: 'VMainLayout'
 });
 
+import { useFCM } from 'src/composables/useFCM'
+
+const { requestPermission, onMessageListener } = useFCM()
+
+const enableNotifications = async () => {
+  const token = await requestPermission()
+  if (token) {
+    // Gửi token lên server của bạn
+    console.log('FCM Token:', token)
+
+    await addDeviceToken(token)
+  }
+}
+
+
 onMounted(async () => {
+  onMessageListener();
+  enableNotifications();
   await getInfo();
 })
 

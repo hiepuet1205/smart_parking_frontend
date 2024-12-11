@@ -3,22 +3,14 @@
     <VBreadCrumbsField :lists="breadCrumbs" />
     <div class="bg-white rounded-borders">
       <div class="row">
-        <div class="col-8">
+        <div class="col-4">
           <div class="row p-16px">
-            <div class="col-6">
+            <div class="col-12">
               <VInputField
                 v-model="keyword"
                 label="Keyword"
                 id="input-keyword"
                 placeholder="keyword"
-              />
-            </div>
-            <div class="col-6">
-              <VSelectField
-                v-model="status"
-                :options="statusOptions"
-                label="Status"
-                id="status"
               />
             </div>
           </div>
@@ -34,7 +26,7 @@
         :rows="staffStore.getStaffs"
         :columns="columns"
         :pagination="pagination"
-        :pageCreate="'CreateStaffPage'"
+        :pageCreate="'CreateUserPage'"
         :meta="staffStore.getMeta"
         :handle-edit="handleEdit"
       />
@@ -44,36 +36,37 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import VSelectField from 'components/common/v-select-field.vue';
 import VInputField from 'components/common/v-input-field.vue';
 import VTableField from 'components/common/v-table-field.vue';
 import VBreadCrumbsField from 'components/common/v-breadcrumbs.vue';
 import { Column, User } from 'components/models';
 import { useStaffStore } from 'src/store/staff.store';
-import { changeStatusStaff, getAllStaff } from 'src/api/staff.api';
-import Swal from 'sweetalert2';
+import { getAllUsers } from 'src/api/user.api';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 
 defineOptions({
   name: 'ListStaffPage',
 });
 
-const breadCrumbs = ref(['Home', 'List Staff']);
+const breadCrumbs = ref(['Home', 'List User']);
 
 const staffStore = useStaffStore();
 
 onMounted(async () => {
-  await getAllStaff();
+  await getAllUsers();
 })
 
 const keyword = ref<string | null>(null);
-const status = ref<string | null>(null);
-  const statusOptions = ref([
-  { label: 'Active', value: 'active' },
-  { label: 'Inactive', value: 'inactive' },
-]);
 
 const handleSearch = async () => {
-  await getAllStaff(keyword.value, status.value);
+  const users = await getAllUsers();
+  console.log(users.filter((user: User) => user.name.toLowerCase().includes(keyword.value?.toLowerCase() || '')));
+  staffStore.setStaffs(users.filter((user: User) => user.name.toLowerCase().includes(keyword.value?.toLowerCase() || '')));
+
+  console.log(staffStore.getStaffs);
 };
 
 const columns: Column[] = [
@@ -86,24 +79,12 @@ const columns: Column[] = [
   },
   { name: 'name', align: 'center', label: 'Name', field: 'name' },
   { name: 'email', align: 'center', label: 'Email', field: 'email' },
-  { name: 'status', align: 'center', label: 'Status', field: 'status' },
+  { name: 'role', align: 'center', label: 'Role', field: 'role' },
   { name: 'actions', align: 'center', field: 'actions', label: 'Action' }
 ]
 
 const handleEdit = (staff: User) => {
-  Swal.fire({
-    title: `Do you want to ${staff.status === 'active' ? 'deactivate' : 'activate'} staff with id: ${staff.id}?`,
-    showDenyButton: true,
-    confirmButtonText: 'Yes',
-    denyButtonText: 'No'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      await changeStatusStaff(staff.id, staff.status === 'active' ? 'inactive' : 'active');
-      Swal.fire('Saved!', '', 'success').then(() => {
-        window.location.reload();
-      })
-    }
-  });
+  router.push({ name: 'AdminResetPasswordUser', params: { userId: staff.id } });
 };
 
 const pagination = {
