@@ -27,13 +27,6 @@
           </q-btn>
         </div>
       </div>
-
-      <div class="row flex justify-end q-mr-lg">
-        <q-btn no-caps class="btn2" :to="{ name: 'CreateSlotPage' }" tag="router-link">
-          <q-icon name="fa-solid fa-circle-plus" class="q-pr-sm"/>
-          Create
-        </q-btn>
-      </div>
     
       <div class="row q-col-gutter-lg px-32px py-16px">
         <div class="col-3" v-for="slot in slotStore.getSlots" :key="slot.id">
