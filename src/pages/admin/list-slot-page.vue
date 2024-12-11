@@ -50,9 +50,6 @@
                 <div class="text-subtitle2">{{ slot.status }}</div>
                 <div class="text-subtitle2">{{ slot.priceHour }}</div>
               </div>
-              <q-btn no-caps class="btn1" tag="router-link" :to="{ name: 'UpdateSlotPage', params: { id: route.params.id, slotId: slot.id } }">
-                <q-icon name="fa-solid fa-pen-to-square" class="q-pr-sm"/>
-              </q-btn>
             </q-card-section>
           </q-card>
         </div>
